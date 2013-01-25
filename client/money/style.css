@@ -1,0 +1,87 @@
+.header_font {
+    font-size: 1.5em;
+    text-align: center;
+    background: white;
+    color: #555;
+}
+
+.input_font {
+    font-size: 1.2em;
+    text-align: center;
+    background: white;
+    color: black;
+}
+
+.button_font {
+    font-size: 1.5em;
+    text-align: center;
+    background: #a0a0a0;
+    color: white;
+}
+
+.info_font {
+    font-size: .7em;
+    background: white;
+    color: #333;
+}
+
+.regular_font {
+    font-size: 1em;
+    background: white;
+    color: #333;
+}
+
+.pad_y {
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+
+.pad_x {
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+.mar_y {
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
+.mar_x {
+    margin-left: .5em;
+    margin-right: .5em;
+}
+
+.full_width {
+    width: 100%;
+}
+
+.border_none {
+    border: none;
+}
+
+.border_bottom {
+    border-bottom: 1px solid #888;
+}
+
+.float_left {
+    float: left;
+}
+
+.float_right {
+    float: right;
+}
+
+.fixed_height_big {
+    line-height: 2em;
+    height: 2em;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+ul > li {
+    list-style: none;
+    margin: 0;
+}

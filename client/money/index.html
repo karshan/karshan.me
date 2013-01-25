@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+    <title>Money Manager</title>
+    <script type="text/javascript" src="/client/jquery1.7.1.min.js"></script>
+    <script type="text/javascript" src="/client/json2.js"></script>
+    <script type="text/javascript" src="/client/kweb.js"></script>
+    <script type="text/javascript" src="/client/money/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/client/normalize.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/client/money/style.css" media="screen" />
+  </head>
+  <body class="regular_font">
+    <div id="container">
+      <div class="page" id="login">
+        <input type="text" id="username" placeholder="Username" class="full_width border_none border_bottom input_font pad_y"></input>
+        <input type="password" id="password" placeholder="Password" class="full_width border_none border_bottom input_font pad_y"></input>
+        <button id="login_button" class="full_width border_none border_bottom button_font pad_y">LOGIN</button>
+      </div> <!-- .page #login -->
+      <div class="page" id="overview">
+        <button id="add_transaction_nav" class="full_width border_none border_bottom button_font pad_y" onclick="kweb.showPage('add_transaction');">Add Transaction</button>
+        <button id="sort_by" class="full_width border_none border_bottom button_font pad_y" onclick="toggle_sort_by(this);">Category</button>
+        <div class="full_width border_none header_font pad_y fixed_height_big">
+          <span class="float_left pad_x">Balance</span>
+          <span class="float_right pad_x" id="balance"></span>
+        </div>
+        <ul id="transaction_list">
+        </ul>
+      </div> <!-- .page #overview -->
+      <div class="page" id="add_transaction">
+        <button id="expense_income_button" class="li_button">Expense</button>
+        <input type="text" id="name" placeholder="Name" class="li_input"></input>
+        <input type="text" id="category" placeholder="Category" class="li_input"></input>
+        <input type="text" id="amount" placeholder="Amount" class="li_input"></input>
+        <input type="text" id="when" class="li_input"></input>
+        <input type="text" id="comment" placeholder="Comment" class="li_input"></input>
+        <button id="add_transaction_button" class="li_button">ADD</button>
+      </div> <!-- .page #add_transaction -->
+    </div> <!-- #container -->
+  </body>
+</html>

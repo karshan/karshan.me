@@ -1,0 +1,9 @@
+ /clip
+    - retrieve only last 25 entries and more as needed (infinite scroll)
+    - detect when the text is a url, display as link iff url
+    - cleanup client code
+    - make it work offline by localstorage caching
+ /music
+    - add /music handlers
+ /money
+ 	- make the spacer in overview page have 0 width
