@@ -6,4 +6,5 @@
  /music
     - add /music handlers
  /money
- 	- make the spacer in overview page have 0 width
+ 	- caching and work offline (listen to online offline events)
+ 	- classes + MVC

@@ -7,10 +7,14 @@ var couchdb = require('couchdb').create({
 var util = require("handler_util");
 var log = require("log");
 
-// TODO rename this getpost_and_login
-function login(arg, cb) {
-    util.getpostJSON(arg, function(arg) {
-        var options = arg;
+// TODO rename this getpost_and_login (make it obvious that options.input has been filled in :/ or do it another way)
+function login(options, cb) {
+    util.getpostJSON(options, function(res) {
+        if (res.error) {
+            return cb(res);
+        }
+
+        options = util.mixin(options, res);
 		if (options.input === undefined ||
 			    typeof options.input.username !== "string" ||
 			    options.input.username === "" ||
@@ -43,7 +47,12 @@ handlers["^/money$"] = handlers["^/money/$"] = function(options) {
 };
 
 handlers["^/money/get"] = function(options) {
-	login(options, function(options) {
+	login(options, function(res) {
+        if (res.error) {
+            return util.writeJSON(options.response, res);
+        }
+
+        options = util.mixin(options, res);
         couchdb.get({"doc": "_all_docs?include_docs=true", "db": "money"}, function(res) {
             if (res.error) {
                 log(res);
@@ -60,7 +69,12 @@ handlers["^/money/get"] = function(options) {
 };
 
 handlers["^/money/add"] = function(options) {
-	login(options, function(options) {
+	login(options, function(res) {
+        if (res.error) {
+            return util.writeJSON(options.response, res);
+        }
+
+        options = util.mixin(options, res);
         if (options.input.transaction === undefined ||
             typeof options.input.transaction.name !== "string" || 
             typeof options.input.transaction.amount !== "number" ||

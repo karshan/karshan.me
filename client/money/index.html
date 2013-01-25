@@ -14,29 +14,34 @@
   </head>
   <body class="regular_font">
     <div id="container">
-      <div class="page" id="login">
+      <div class="page" id="login" style="display:none">
         <input type="text" id="username" placeholder="Username" class="full_width border_none border_bottom input_font pad_y"></input>
         <input type="password" id="password" placeholder="Password" class="full_width border_none border_bottom input_font pad_y"></input>
-        <button id="login_button" class="full_width border_none border_bottom button_font pad_y">LOGIN</button>
+        <button class="full_width border_none border_bottom button_font pad_y" onclick="login();">Login</button>
+        <div class="full_width pad_y border_bottom">
+          <input type="checkbox" id="remember_me" class="mar_x"></input><span class="info_font">Keep me logged in</span>
+        </div>
       </div> <!-- .page #login -->
-      <div class="page" id="overview">
-        <button id="add_transaction_nav" class="full_width border_none border_bottom button_font pad_y" onclick="kweb.showPage('add_transaction');">Add Transaction</button>
-        <button id="sort_by" class="full_width border_none border_bottom button_font pad_y" onclick="toggle_sort_by(this);">Category</button>
-        <div class="full_width border_none header_font pad_y fixed_height_big">
+      <div class="page" id="overview" style="display:none">
+        <button class="full_width border_none border_bottom button_font pad_y" onclick="logout();">Logout</button>
+        <button class="full_width border_none border_bottom button_font pad_y" onclick="kweb.showPage('add_transaction');">Add Transaction</button>
+        <button id="sort_by_button" class="full_width border_none border_bottom toggle_button_font pad_y" onclick="toggle_sort_by(this);">Category</button>
+        <div class="full_width border_none border_bottom header_font fixed_height_big">
           <span class="float_left pad_x">Balance</span>
           <span class="float_right pad_x" id="balance"></span>
         </div>
         <ul id="transaction_list">
         </ul>
       </div> <!-- .page #overview -->
-      <div class="page" id="add_transaction">
-        <button id="expense_income_button" class="li_button">Expense</button>
-        <input type="text" id="name" placeholder="Name" class="li_input"></input>
-        <input type="text" id="category" placeholder="Category" class="li_input"></input>
-        <input type="text" id="amount" placeholder="Amount" class="li_input"></input>
-        <input type="text" id="when" class="li_input"></input>
-        <input type="text" id="comment" placeholder="Comment" class="li_input"></input>
-        <button id="add_transaction_button" class="li_button">ADD</button>
+      <div class="page" id="add_transaction" style="display:none">
+        <button id="transaction_type_button" class="full_width border_none border_bottom toggle_button_font pad_y" onclick="toggle_transaction_type(this);">Expense</button>
+        <input type="text" id="name" placeholder="Name" class="full_width border_none border_bottom input_font pad_y"></input>
+        <input type="text" id="amount" placeholder="Amount" class="full_width border_none border_bottom input_font pad_y"></input>
+        <input type="text" id="category" placeholder="Category" class="full_width border_none border_bottom input_font pad_y"></input>
+        <input type="text" id="when" class="full_width border_none border_bottom input_font pad_y"></input>
+        <input type="text" id="comment" placeholder="Comment" class="full_width border_none border_bottom input_font pad_y"></input>
+        <button class="full_width border_none border_bottom button_font pad_y" onclick="add_current_transaction();">Add</button>
+        <button class="full_width border_none border_bottom button_font pad_y" onclick="kweb.showPage('overview');">Cancel</button>
       </div> <!-- .page #add_transaction -->
     </div> <!-- #container -->
   </body>

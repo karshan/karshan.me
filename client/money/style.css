@@ -1,3 +1,7 @@
+.bold {
+    font-weight: bold;
+}
+
 .header_font {
     font-size: 1.5em;
     text-align: center;
@@ -16,6 +20,13 @@
     font-size: 1.5em;
     text-align: center;
     background: #a0a0a0;
+    color: white;
+}
+
+.toggle_button_font {
+    font-size: 1em;
+    text-align: center;
+    background: #343;
     color: white;
 }
 
@@ -71,9 +82,29 @@
     float: right;
 }
 
+.fixed_height_huge {
+    line-height: 1.7em;
+    height: 3em;
+}
+
 .fixed_height_big {
-    line-height: 2em;
-    height: 2em;
+    line-height: 2.3em;
+    height: 2.3em;
+}
+
+.fixed_height_small {
+    line-height: 1.7em;
+    height: 1.7em;
+}
+
+.position_relative {
+    position: relative;
+}
+
+.bottom_right {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
 }
 
 ul {
