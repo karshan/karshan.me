@@ -29,29 +29,35 @@ handlers["^/clip/get$"] = function(options) {
     });
 };
 
-handlers["^/clip/put"] = util.getpostify(function(options) {
-    if (typeof options.input.text !== "string" || options.input.text === "") {
-            log({
-                "error": "unexpected input",
-                "input": options.input
-            });
-            util.writeJSON(options.response, {"error": "bad input"});
-            return;
-    }
-
-    couchdb.post({
-        "db": "clip",
-        "doc": "",
-        "data": { "text": options.input.text, "date": new Date().getTime() }
-    }, function(res) {
+handlers["^/clip/put"] = function(options) {
+    util.getpostJSON(options, function(res) {
         if (res.error) {
-            log(res);
-            util.writeJSON(options.response, {"error": "internal error"});
-            return;
+            return util.writeJSON(options.response, res);
         }
-        util.writeJSON(options.response, { "ok": true });
+
+        options = util.mixin(options, res);
+        if (typeof options.input.text !== "string" || options.input.text === "") {
+                log({
+                    "error": "unexpected input",
+                    "input": options.input
+                });
+                util.writeJSON(options.response, {"error": "bad input"});
+                return;
+        }
+
+        couchdb.post({
+            "db": "clip",
+            "doc": "",
+            "data": { "text": options.input.text, "date": new Date().getTime() }
+        }, function(res) {
+            if (res.error) {
+                log(res);
+                util.writeJSON(options.response, {"error": "internal error"});
+                return;
+            }
+            util.writeJSON(options.response, { "ok": true });
+        });
     });
-});
-// end CLIP handlers
+};
 
 module.exports = handlers;
