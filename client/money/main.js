@@ -88,8 +88,7 @@ function get_transactions(auth, cb) {
         type: "POST",
         processData: false,
         data: JSON.stringify(auth),
-        cache: false,
-        url: url_prefix + '/money/get',
+        url: url_prefix + '/money/get' + '?_=' + (new Date()).getTime(), // prevent caching this get
         success: function(data) {
             cb(data);
         },
@@ -246,11 +245,13 @@ $(document).ready(function() {
     }
 
     kweb.onPageLoad("overview", function() {
+        // FIXME show the last added transaction
         get_transactions(global_data.login, function(res) {
             if (res.error) {
                 alert(res.error);
                 logout();
             } else {
+                global_data.transactions = res.transactions;
                 if ($("#sort_by_button").html() === "Category")
                     render_overview_by_category();
                 else
@@ -310,6 +311,13 @@ function add_current_transaction() {
 
 function toggle_transaction_type(elt) {
     var new_val = elt.innerHTML === "Expense" ? "Income" : "Expense";
+    if (new_val === "Expense") {
+        $(elt).removeClass("green_back");
+        $(elt).addClass("red_back");
+    } else {
+        $(elt).removeClass("red_back");
+        $(elt).addClass("green_back");
+    }
     elt.innerHTML = new_val;
 }
 

@@ -115,6 +115,14 @@
     right: 0;
 }
 
+.red_back {
+    background: #911;
+}
+
+.green_back {
+    background: #383;
+}
+
 ul {
     margin: 0;
     padding: 0;
