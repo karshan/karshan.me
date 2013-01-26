@@ -8,3 +8,4 @@
  /money
  	- caching and work offline (listen to online offline events)
  	- classes + MVC
+ 	- category autocomplete

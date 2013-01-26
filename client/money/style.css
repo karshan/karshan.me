@@ -123,6 +123,10 @@
     background: #383;
 }
 
+.cursor_pointer {
+    cursor: pointer;
+}
+
 ul {
     margin: 0;
     padding: 0;

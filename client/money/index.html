@@ -40,10 +40,17 @@
         <input type="text" id="name" placeholder="Name" class="full_width border_none border_bottom input_font pad_y"></input>
         <input type="text" id="category" placeholder="Category" class="full_width border_none border_bottom input_font pad_y"></input>
         <input type="text" id="when" class="full_width border_none border_bottom input_font pad_y"></input>
-        <input type="text" id="comment" placeholder="Comment" class="full_width border_none border_bottom input_font pad_y"></input>
+        <textarea rows=5 id="comment" placeholder="Comment" class="full_width border_none border_bottom info_font pad_y"></textarea>
         <button class="full_width border_none border_bottom button_font pad_y" onclick="add_current_transaction();">Add</button>
         <button class="full_width border_none border_bottom button_font pad_y" onclick="kweb.showPage('overview');">Cancel</button>
       </div> <!-- .page #add_transaction -->
+      <div class="page" id="transaction" style="display:none">
+        <button class="full_width border_none border_bottom button_font pad_y" onclick="kweb.showPage('overview');">Back</button>
+        <button class="full_width border_none border_bottom button_font pad_y" onclick="delete_current_transaction();">Delete</button>
+        <button class="full_width border_none border_bottom button_font pad_y" onclick="edit_current_transaction();">Edit</button>
+        <div id="transaction_holder"></div>
+      </div>
+      </div> <!-- .page #transaction -->
     </div> <!-- #container -->
   </body>
 </html>

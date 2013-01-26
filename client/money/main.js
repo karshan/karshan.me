@@ -157,7 +157,7 @@ function render_overview_by_time() {
 	for (var i in transactions) {
 		var t = transactions[i];
 		html += '<li class="full_width border_none border_bottom fixed_height_huge position_relative">' +
-                    '<span class="float_left bold pad_x">' + t.name + '</span>' +
+                    '<span class="float_left bold cursor_pointer pad_x" onclick="kweb.showPage(\'transaction\', \'' + escape(t._id) + '\')">' + t.name + '</span>' +
                     '<span class="float_left pad_x">' + t.category + '</span>' +
 			        '<span class="float_right pad_x">' +  format_amount(t.amount) + '</span>' +
                     '<span class="bottom_right info_font">' + fuzzytime(t.timestamp) + '<span>' +
@@ -166,6 +166,9 @@ function render_overview_by_time() {
 	$("#transaction_list").html(html);
 }
 
+function show_transaction(page, id) {
+    alert(unescape(id));
+}
 
 function get_and_show_overview(login) {
 	get_transactions({
@@ -273,6 +276,8 @@ $(document).ready(function() {
             login();
         }
     });
+
+    kweb.onPageLoad("transaction", show_transaction);
 });
 
 // Click handlers
