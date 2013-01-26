@@ -228,6 +228,12 @@ function remembered_login() {
 }
 
 $(document).ready(function() {
+    $("#loading").bind("ajaxSend", function(){
+        $(this).show();
+    }).bind("ajaxComplete", function(){
+        $(this).hide();
+    });
+
     if (window.localStorage) {
         var login = remembered_login();
         if (login !== false) {
@@ -295,7 +301,6 @@ function add_current_transaction() {
         "timestamp": timestamp.getTime(),
         "comment": $("#comment").val()
     }, function(res) {
-        alert(JSON.stringify(res));
         if (res.error) {
             alert(res.error);
         }

@@ -1,3 +1,11 @@
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: red;
+    color: white;
+}
+
 .bold {
     font-weight: bold;
 }
@@ -103,8 +111,8 @@
 
 .bottom_right {
     position: absolute;
-    bottom: 0px;
-    right: 0px;
+    bottom: 0;
+    right: 0;
 }
 
 ul {
