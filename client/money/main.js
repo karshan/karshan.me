@@ -261,7 +261,11 @@ $(document).ready(function() {
     });
 
     kweb.onPageLoad("add_transaction", function(page) {
-    	$("#when").val((new Date()).toString()); // TODO only display Year Month Day
+        if ($("#transaction_type_button").html() !== "Expense") {
+            $("#transaction_type_button").click();
+        }
+        $("#name").val(""); $("#amount").val(""); $("#category").val(""); $("#comment").val("");
+        $("#when").val((new Date()).toString()); // TODO only display Year Month Day
     });
     
     $("#password").keypress(function(e) {
