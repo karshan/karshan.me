@@ -281,6 +281,9 @@ $(document).ready(function() {
 });
 
 // Click handlers
+
+// login button click handler also called from elsewhere
+
 function login() {
     get_and_show_overview({
         username: $("#username").val(),
@@ -288,6 +291,7 @@ function login() {
     });
 }
 
+// Add click handler on add_transaction page
 function add_current_transaction() {
     var amount = parseFloat($("#amount").val());
     var timestamp = new Date($("#when").val());
@@ -318,6 +322,14 @@ function add_current_transaction() {
     });
 }
 
+function delete_current_transaction() {
+
+}
+
+function edit_current_transaction() {
+
+}
+
 function toggle_transaction_type(elt) {
     var new_val = elt.innerHTML === "Expense" ? "Income" : "Expense";
     if (new_val === "Expense") {
@@ -335,4 +347,3 @@ function toggle_sort_by(elt) {
     elt.innerHTML = new_val;
     kweb.showPage("overview");
 }
-
