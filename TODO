@@ -6,6 +6,7 @@
  /music
     - add /music handlers
  /money
+	- better time strings (1 day ago may mean day before or yesterday, that sucks)
  	- caching and work offline (listen to online offline events)
  	- classes + MVC
  	- category autocomplete
