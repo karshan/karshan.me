@@ -8,9 +8,10 @@ var global_data = {};
 // and edited to be better
 function fuzzytime(date) {
     // TODO better time strings (1 day ago may mean day before or yesterday, that sucks)
-    // for now
+    // for now just return dd/mm/yyyy
     var d = new Date(date);
     return (d.getDate()) + '/' + (d.getMonth()+1) + '/' + (d.getYear()+1900);
+
     var delta = new Date(new Date().getTime() - date);
 
     var SECOND = 1000.0;
@@ -174,8 +175,29 @@ function render_overview_by_time() {
 	$("#transaction_list").html(html);
 }
 
+function get_transaction_by_id(id) {
+    for (var i in global_data.transactions) {
+        var t = global_data.transactions[i];
+        if (t._id === id)
+            return t;
+    }
+    return undefined;
+}
+
 function show_transaction(page, id) {
-    alert(unescape(id));
+    var t = get_transaction_by_id(unescape(id));
+    if (t === undefined) {
+        alert("BUG: trying to view a non-existent transaction");
+        kweb.showPage("overview");
+    }
+    // TODO templating!!!
+    var html = 
+        '<div class="bold full_width pad_x pad_y border_bottom">' + "Name: " + t.name + '</div>' +
+        '<div class="bold full_width pad_x pad_y border_bottom">' + "Category: " + t.category + '</div>' +
+        '<div class="bold full_width pad_x pad_y border_bottom">' + "Amount: " + format_amount(t.amount) + '</div>' +
+        '<div class="bold full_width pad_x pad_y border_bottom">' + "Comment:" + t.comment + '</div>' +
+        '<div class="bold full_width pad_x pad_y border_bottom">' + "Time: " + fuzzytime(t.timestamp) + '</div>';
+    document.getElementById("transaction_holder").innerHTML = html; // wtf JQUERY ( $("transaction_holder").html(html) ) doesn't work here
 }
 
 function get_and_show_overview(login) {

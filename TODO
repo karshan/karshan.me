@@ -6,14 +6,19 @@
  /music
     - add /music handlers
  /money
-	- better time strings (1 day ago may mean day before or yesterday, that sucks)
-	- screen size based layout
- 	- caching and work offline (listen to online offline events)
- 	- classes + MVC
- 	- implement ability to unfold overview by categories to see transactions by category
- 	- more transaction sorting options including javascript filter functions
- 	- category autocomplete
- 	- implement edit transaction
- 	- fetching tcf balance and transactions and doing amount based compare
- 	- auto send email to dad for any transaction above $20
- 	- XSS prevention
+ 	- Short Term:
+ 		- use object oriented programming (classes + MVC)
+    	- use html templates
+		- better time strings (1 day ago may mean day before or yesterday, that sucks)
+		- implement ability to unfold overview by categories to see transactions by category	
+ 		- more transaction sorting options including javascript filter functions
+ 		- daily/monthly etc. expense graphs
+ 		- category autocomplete and autocomplete in general
+ 		- implement edit transaction 	
+ 	- Mid Term:
+ 		- screen size based layout
+ 		- fetching tcf balance and transactions and doing amount based compare
+ 		- auto send email to dad for any transaction above $20
+ 	- Long Term:
+ 		- caching and work offline (listen to online offline events)
+ 	 	- XSS prevention
