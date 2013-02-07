@@ -15,27 +15,27 @@ function login(options, cb) {
         }
 
         options = util.mixin(options, res);
-		if (options.input === undefined ||
-			    typeof options.input.username !== "string" ||
-			    options.input.username === "" ||
-			    typeof options.input.password !== "string" ||
-			    options.input.password === "") {
-			return cb({"error": "bad input"});
-		}
+        if (options.input === undefined ||
+                typeof options.input.username !== "string" ||
+                options.input.username === "" ||
+                typeof options.input.password !== "string" ||
+                options.input.password === "") {
+            return cb({"error": "bad input"});
+        }
 
-		couchdb.get({
-			db: "money_auth",
-			doc: options.input.username
-		}, function(res) {
-			if (res.error && res.error !== "not_found") {
-				cb({"error": "internal error"});
-			} else if (res.password === options.input.password) {
-				cb(options); // LOGIN succesful
-			} else {
-			    cb({"error": "authentication failed"});
+        couchdb.get({
+            db: "money_auth",
+            doc: options.input.username
+        }, function(res) {
+            if (res.error && res.error !== "not_found") {
+                cb({"error": "internal error"});
+            } else if (res.password === options.input.password) {
+                cb(options); // LOGIN succesful
+            } else {
+                cb({"error": "authentication failed"});
             }
-		});
-	});
+        });
+    });
 }
 
 var handlers = {};
@@ -47,7 +47,7 @@ handlers["^/money$"] = handlers["^/money/$"] = function(options) {
 };
 
 handlers["^/money/get"] = function(options) {
-	login(options, function(res) {
+    login(options, function(res) {
         if (res.error) {
             return util.writeJSON(options.response, res);
         }
@@ -68,8 +68,39 @@ handlers["^/money/get"] = function(options) {
     });
 };
 
+handlers["^/money/delete"] = function(options) {
+    login(options, function(res) {
+        if (res.error) {
+            return util.writeJSON(options.response, res);
+        }
+
+        options = util.mixin(options, res);
+        if (options.input.transaction_id === undefined ||
+                typeof options.input.transaction_id !== "string") {
+            log({
+                "error": "unexpected input",
+                "input": options.input
+            });
+            return util.writeJSON(options.response, {"error": "bad input"});
+        }
+
+        couchdb.delete({
+            "db": "money",
+            "doc": options.input.transaction_id
+        }, function(res) {
+            if (res.error && res.error !== "not_found") {
+                util.writeJSON(options.response, {"error": "invalid transaction_id"});
+            } else if (res.error) {
+                util.writeJSON(options.response, {"error": "internal error"});
+            } else {
+                util.writeJSON(options.response, {"ok": true});
+            }
+        });
+    });
+};
+
 handlers["^/money/add"] = function(options) {
-	login(options, function(res) {
+    login(options, function(res) {
         if (res.error) {
             return util.writeJSON(options.response, res);
         }
