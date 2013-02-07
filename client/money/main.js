@@ -5,8 +5,12 @@ var url_prefix = "http://" + window.location.hostname + ':' + window.location.po
 var global_data = {};
 
 // stolen from http://stackoverflow.com/questions/11/calculating-relative-time
+// and edited to be better
 function fuzzytime(date) {
-    var delta = new Date().getTime() - date;
+    // TODO better time strings (1 day ago may mean day before or yesterday, that sucks)
+    // for now
+    return new Date(date).toLocaleString();
+    var delta = new Date(new Date().getTime() - date);
 
     var SECOND = 1000.0;
     var MINUTE = 60 * SECOND;
@@ -14,6 +18,8 @@ function fuzzytime(date) {
     var DAY = 24 * HOUR;
     var MONTH = 30 * DAY;
     var YEAR = 12 * MONTH;
+
+    var yesterday = new Date().getTime()
 
     var ts = {
         "Seconds": Math.floor(delta/SECOND),
@@ -138,8 +144,8 @@ function render_overview_by_category() {
 	for (var c in bycategory) {
 		var transactions = bycategory[c];
 		var amount = transactions.reduce(function(sum, a) { return sum + a.amount }, 0);
-		html += '<li class="full_width border_none border_bottom fixed_height_small">' +
-                    '<span class="float_left bold pad_x">' + c + '</span>' +
+		html += '<li class="full_width border_none border_bottom fixed_height_big">' +
+                    '<span class="float_left size_limited bold pad_x">' + c + '</span>' +
 			        '<span class="float_right pad_x">' +  format_amount(amount) + '</span>' +
                 '</li>';
 	}
@@ -157,10 +163,11 @@ function render_overview_by_time() {
 	for (var i in transactions) {
 		var t = transactions[i];
 		html += '<li class="full_width border_none border_bottom fixed_height_huge position_relative">' +
-                    '<span class="float_left bold cursor_pointer pad_x" onclick="kweb.showPage(\'transaction\', \'' + escape(t._id) + '\')">' + t.name + '</span>' +
-                    '<span class="float_left pad_x">' + t.category + '</span>' +
+                    '<span class="float_left size_limited bold cursor_pointer pad_x" onclick="kweb.showPage(\'transaction\', \'' + escape(t._id) + '\')">' + t.name + '</span>' +
+                    '<span class="float_left size_limited pad_x">' + t.category + '</span>' +
 			        '<span class="float_right pad_x">' +  format_amount(t.amount) + '</span>' +
-                    '<span class="bottom_right info_font">' + fuzzytime(t.timestamp) + '<span>' +
+                    '<span class="bottom_left info_font">' + t.comment + '</span>' +
+                    '<span class="bottom_right info_font">' + fuzzytime(t.timestamp) + '</span>' +
                 '</li>';
 	}
 	$("#transaction_list").html(html);

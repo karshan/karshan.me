@@ -96,7 +96,7 @@
 }
 
 .fixed_height_big {
-    line-height: 2.3em;
+    line-height: 1.7em;
     height: 2.3em;
 }
 
@@ -107,6 +107,12 @@
 
 .position_relative {
     position: relative;
+}
+
+.bottom_left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .bottom_right {
@@ -125,6 +131,12 @@
 
 .cursor_pointer {
     cursor: pointer;
+}
+
+.size_limited {
+    max-width: 6em;
+    max-height: 2em;
+    overflow: auto;
 }
 
 ul {

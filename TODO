@@ -7,9 +7,11 @@
     - add /music handlers
  /money
 	- better time strings (1 day ago may mean day before or yesterday, that sucks)
+	- screen size based layout
  	- caching and work offline (listen to online offline events)
  	- classes + MVC
  	- category autocomplete
  	- implement edit transaction
  	- fetching tcf balance and transactions and doing amount based compare
  	- auto send email to dad for any transaction above $20
+ 	- XSS prevention
