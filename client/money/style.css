@@ -134,7 +134,7 @@
 }
 
 .size_limited {
-    max-width: 220px;
+    max-width: 200px;
     max-height: 2em;
     overflow: auto;
 }
