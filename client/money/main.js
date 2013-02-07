@@ -9,7 +9,8 @@ var global_data = {};
 function fuzzytime(date) {
     // TODO better time strings (1 day ago may mean day before or yesterday, that sucks)
     // for now
-    return new Date(date).toLocaleString();
+    var d = new Date(date);
+    return (d.getDate()) + '/' + (d.getMonth()+1) + '/' + (d.getYear()+1900);
     var delta = new Date(new Date().getTime() - date);
 
     var SECOND = 1000.0;
@@ -166,7 +167,7 @@ function render_overview_by_time() {
                     '<span class="float_left size_limited bold cursor_pointer pad_x" onclick="kweb.showPage(\'transaction\', \'' + escape(t._id) + '\')">' + t.name + '</span>' +
                     '<span class="float_left size_limited pad_x">' + t.category + '</span>' +
 			        '<span class="float_right pad_x">' +  format_amount(t.amount) + '</span>' +
-                    '<span class="bottom_left info_font">' + t.comment + '</span>' +
+                    '<span class="bottom_left size_limited info_font">' + t.comment + '</span>' +
                     '<span class="bottom_right info_font">' + fuzzytime(t.timestamp) + '</span>' +
                 '</li>';
 	}
