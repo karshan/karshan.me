@@ -75,8 +75,15 @@ handlers["^/money/delete"] = function(options) {
         }
 
         options = util.mixin(options, res);
-        if (options.input.transaction_id === undefined ||
-                typeof options.input.transaction_id !== "string") {
+        // TODO replace this garbage with a function call is_safe(...)
+        if (options.input.transaction === undefined ||
+                options.input.transaction.id === undefined ||
+                typeof options.input.transaction.id !== "string" ||
+                options.input.transaction.id === "" ||
+                /\//.test(options.input.transaction.id) === true ||
+                options.input.transaction.rev === undefined ||
+                typeof options.input.transaction.rev !== "string" ||
+                /\//.test(options.input.transaction.rev) === true) {
             log({
                 "error": "unexpected input",
                 "input": options.input
@@ -86,11 +93,17 @@ handlers["^/money/delete"] = function(options) {
 
         couchdb.delete({
             "db": "money",
-            "doc": options.input.transaction_id
+            "doc": options.input.transaction.id,
+            "rev": options.input.transaction.rev
         }, function(res) {
             if (res.error && res.error !== "not_found") {
+                log({
+                    input: options.input,
+                    result: res
+                })
                 util.writeJSON(options.response, {"error": "invalid transaction_id"});
             } else if (res.error) {
+                log(res);
                 util.writeJSON(options.response, {"error": "internal error"});
             } else {
                 util.writeJSON(options.response, {"ok": true});

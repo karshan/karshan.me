@@ -106,6 +106,21 @@ function get_transactions(auth, cb) {
     });
 }
 
+function delete_transaction(id, rev, cb) {
+    $.ajax({
+        type: "POST",
+        processData: false,
+        data: JSON.stringify(mixin(global_data.login, {transaction: { id: id, rev: rev}})),
+        url: url_prefix + '/money/delete',
+        success: function(data) {
+            cb(data);
+        },
+        error: function(xhr, textStatus, e) {
+            cb({"error": "ajax error"}); // TODO give more info about the error
+        }
+    }); 
+}
+
 function add_transaction(transaction, cb) {
 	$.ajax({
         type: "POST",
@@ -185,7 +200,7 @@ function get_transaction_by_id(id) {
 }
 
 function show_transaction(page, id) {
-    var t = get_transaction_by_id(unescape(id));
+    var t = global_data.current_transaction = get_transaction_by_id(unescape(id));
     if (t === undefined) {
         alert("BUG: trying to view a non-existent transaction");
         kweb.showPage("overview");
@@ -353,7 +368,13 @@ function add_current_transaction() {
 }
 
 function delete_current_transaction() {
-
+    var t = global_data.current_transaction;
+    delete_transaction(t._id, t._rev, function(res) {
+        if (res.error) {
+            alert(res.error);
+        }
+        kweb.showPage("overview");
+    })
 }
 
 function edit_current_transaction() {
