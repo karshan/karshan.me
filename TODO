@@ -10,6 +10,8 @@
 	- screen size based layout
  	- caching and work offline (listen to online offline events)
  	- classes + MVC
+ 	- implement ability to unfold overview by categories to see transactions by category
+ 	- more transaction sorting options including javascript filter functions
  	- category autocomplete
  	- implement edit transaction
  	- fetching tcf balance and transactions and doing amount based compare
