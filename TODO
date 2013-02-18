@@ -7,17 +7,21 @@
     - add /music handlers
  /money
  	- Short Term:
- 		- use object oriented programming (classes + MVC)
-    	- use html templates
 		- better time strings (1 day ago may mean day before or yesterday, that sucks)
 		- implement ability to unfold overview by categories to see transactions by category	
  		- more transaction sorting options including javascript filter functions
  		- daily/monthly etc. expense graphs
  		- category autocomplete and autocomplete in general
+		- infinite categories per transaction (tags)
  		- implement edit transaction 	
+		- future transaction entering
+		- view balance at particular time
+		- oweapp integration (allow to check paying for others while adding)
  	- Mid Term:
  		- screen size based layout
  		- fetching tcf balance and transactions and doing amount based compare
+ 		- use object oriented programming (classes + MVC)
+	    	- use html templates
  		- auto send email to dad for any transaction above $20
  	- Long Term:
  		- caching and work offline (listen to online offline events)
