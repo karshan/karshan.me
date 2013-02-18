@@ -4,6 +4,9 @@ var url_prefix = "http://" + window.location.hostname + ':' + window.location.po
 
 // stolen from http://stackoverflow.com/questions/11/calculating-relative-time
 function datestr(date) {
+    var d = new Date(date);
+    return (d.getDate()) + '/' + (d.getMonth()+1) + '/' + (d.getYear()+1900); // FIXME below errors randomly
+
     var delta = new Date().getTime() - date;
 
     var SECOND = 1000.0;
