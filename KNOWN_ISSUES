@@ -1,0 +1,2 @@
+/money:
+	- resizing on the desktop causes weird graph things. The transactions array is weirdly modified :/
