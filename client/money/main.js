@@ -229,21 +229,31 @@ function render_daily_graph() {
     var max = daily_data.reduce(function(p, v) { return p > v ? p : v; }); 
     var min = daily_data.reduce(function(p, v) { return p < v ? p : v; });
     var axes_inc_dollars = (Math.round( ((max-min)/5)/50 ) * 50);
-    var axes_inc_px = axes_inc_dollars/((max - min)/canvas.height);
+    var dollars_per_px = ((max - min)/canvas.height);
+    var axes_inc_px = axes_inc_dollars/dollars_per_px;
+
+    console.log('min: ' + min, ', max: ', max);
 
     canvas.width = window.innerWidth;
     context.clearRect(0, 0, canvas.width, canvas.height);
     
     // draw axes
     context.beginPath();
-    for (var i = 1; i < 5; i++) {
-        context.moveTo(0, canvas.height - i*axes_inc_px );
-        context.lineTo(canvas.width, canvas.height - i*axes_inc_px );
+    for (var i = 0; i < 4; i++) {
+        context.moveTo(0, canvas.height - (i*axes_inc_px + (axes_inc_dollars - min)/dollars_per_px));
+        context.lineTo(canvas.width, canvas.height - (i*axes_inc_px + (axes_inc_dollars - min)/dollars_per_px));
     }
     context.lineWidth = 1;
     context.strokeStyle = '#aaa';
     context.stroke();
 
+    context.fillStyle = '#000';
+    context.font = '10px sans-serif';
+    context.textBaseline = 'bottom';
+    for (var i = 0; i < 4; i++) {
+        context.fillText(axes_inc_dollars*(i+1), 10, canvas.height - (i*axes_inc_px + (axes_inc_dollars - min)/dollars_per_px));
+    }
+    
     context.beginPath();
     context.moveTo(0, canvas.height - ((daily_data[0] - min) * (canvas.height/(max - min))) );
     for (var i = 1; i < daily_data.length; i++) {
