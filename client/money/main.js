@@ -175,13 +175,19 @@ function is_sameday(a, b) {
     return a.getDate() == b.getDate() && a.getMonth() == b.getMonth() && a.getYear() == b.getYear();
 }
 
+function days_since(first, current) {
+    return (current - first)/1000.0/3600.0/24.0;
+}
+
 function get_daily_expense() {
     var transactions = global_data.transactions;
 	transactions.sort(function(a, b) { return a.timestamp - b.timestamp });
 
     var daily_expenses = [];
-    var expense_this_day = 0
+    var expense_this_day = 0;
+    var total_expense = 0;
     var current_day = null;
+    var first_day = null;
     for (var i = 0; i < transactions.length; i++) {
         var t = transactions[i];
         
@@ -189,8 +195,9 @@ function get_daily_expense() {
             continue;
         }
 
+        total_expense += -t.amount;
         if (current_day === null) {
-            current_day = t.timestamp;
+            first_day = current_day = t.timestamp;
         }
 
         if (is_sameday(current_day, t.timestamp)) {
@@ -199,11 +206,15 @@ function get_daily_expense() {
 
         if (!is_sameday(current_day, t.timestamp)) {
             current_day = t.timestamp;
-            daily_expenses.push(expense_this_day);
+            daily_expenses.push(total_expense/days_since(first_day, current_day));
             expense_this_day = -t.amount;
         }
     }
-    daily_expenses.push(expense_this_day);
+    
+    if (transactions.length !== 0) {
+        daily_expenses.push(total_expense/days_since(first_day, current_day));
+    }
+    
     return daily_expenses;
 }
 
@@ -212,17 +223,31 @@ function render_daily_graph() {
     var context = canvas.getContext('2d');
     var daily_data = get_daily_expense();
     var max = daily_data.reduce(function(p, v) { return p > v ? p : v; }); 
-    var min = daily_data.reduce(function(p, v) { return p < v ? p : v; }); 
+    var min = daily_data.reduce(function(p, v) { return p < v ? p : v; });
+    var axes_inc_dollars = (Math.round( ((max-min)/5)/50 ) * 50);
+    var axes_inc_px = axes_inc_dollars/((max - min)/canvas.height);
 
     canvas.width = window.innerWidth;
     context.clearRect(0, 0, canvas.width, canvas.height);
     
+    // draw axes
+    context.beginPath();
+    for (var i = 1; i < 5; i++) {
+        context.moveTo(0, canvas.height - i*axes_inc_px );
+        context.lineTo(canvas.width, canvas.height - i*axes_inc_px );
+    }
+    context.lineWidth = 1;
+    context.strokeStyle = '#aaa';
+    context.stroke();
+
     context.beginPath();
     context.moveTo(0, canvas.height - ((daily_data[0] - min) * (canvas.height/(max - min))) );
     for (var i = 1; i < daily_data.length; i++) {
         context.lineTo(i*canvas.width/(daily_data.length - 1), canvas.height - ((daily_data[i] - min) * (canvas.height/(max - min))) );
     }
     context.lineJoin = 'round';
+    context.lineWidth = 2;
+    context.strokeStyle = '#444';
     context.stroke();
 }
 
@@ -287,7 +312,7 @@ function get_and_show_overview(login) {
                     window.localStorage.setItem("username", login.username);
                     window.localStorage.setItem("password", login.password);
                 } else {
-                    alert("sorry your browser suck you won't be remembered");
+                    alert("sorry your browser sucks you won't be remembered");
                 }
             }
 			global_data.login = {
