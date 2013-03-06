@@ -218,6 +218,10 @@ function get_daily_expense() {
     return daily_expenses;
 }
 
+window.addEventListener('resize', function() {
+    render_daily_graph();
+}, false);
+
 function render_daily_graph() {
     var canvas = document.getElementById("daily_graph");
     var context = canvas.getContext('2d');
