@@ -134,9 +134,9 @@
 }
 
 .size_limited {
-    max-width: 6em;
+/*    max-width: 6em;
     max-height: 2em;
-    overflow: auto;
+    overflow: auto;*/
 }
 
 ul {

@@ -179,28 +179,31 @@ function get_daily_expense() {
     var transactions = global_data.transactions;
 	transactions.sort(function(a, b) { return a.timestamp - b.timestamp });
 
-    if (transactions.length == 0) return [];
-
     var daily_expenses = [];
-    var expense_this_day = -transactions[0].amount; // FIXME if amount > 0
-    var current_day = transactions[0].timestamp;
-    for (var i = 1; i < transactions.length; i++) {
+    var expense_this_day = 0
+    var current_day = null;
+    for (var i = 0; i < transactions.length; i++) {
         var t = transactions[i];
-        if (t.amount > 0) continue;
+        
+        if (t.amount > 0) {
+            continue;
+        }
+
+        if (current_day === null) {
+            current_day = t.timestamp;
+        }
 
         if (is_sameday(current_day, t.timestamp)) {
             expense_this_day += -t.amount;
-            if (i == transactions.length - 1) {
-                current_day = t.timestamp;
-                daily_expenses.push(expense_this_day);
-                expense_this_day = 0;
-            }
-        } else {
+        } 
+
+        if (!is_sameday(current_day, t.timestamp)) {
             current_day = t.timestamp;
             daily_expenses.push(expense_this_day);
             expense_this_day = -t.amount;
         }
     }
+    daily_expenses.push(expense_this_day);
     return daily_expenses;
 }
 
@@ -215,9 +218,9 @@ function render_daily_graph() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     
     context.beginPath();
-    context.moveTo(0, (daily_data[0] - min) * (canvas.height/(max - min)) );
+    context.moveTo(0, canvas.height - ((daily_data[0] - min) * (canvas.height/(max - min))) );
     for (var i = 1; i < daily_data.length; i++) {
-        context.lineTo(i*canvas.width/daily_data.length, (daily_data[i] - min) * (canvas.height/(max - min)) );
+        context.lineTo(i*canvas.width/(daily_data.length - 1), canvas.height - ((daily_data[i] - min) * (canvas.height/(max - min))) );
     }
     context.lineJoin = 'round';
     context.stroke();
@@ -227,8 +230,8 @@ function render_overview_by_time() {
     var transactions = global_data.transactions;
 	render_balance(transactions);
 
-	transactions.sort(function(a, b) { return b.timestamp - a.timestamp });
     render_daily_graph();
+	transactions.sort(function(a, b) { return b.timestamp - a.timestamp });
 
     // TODO templating!!!
 	var html = "";
