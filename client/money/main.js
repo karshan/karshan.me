@@ -169,11 +169,48 @@ function render_overview_by_category() {
 	$("#transaction_list").html(html);
 }
 
+function get_daily_expense() {
+    var transactions = global_data.transactions;
+	transactions.sort(function(a, b) { return b.timestamp - a.timestamp });
+
+    if (transactions.length == 0) return [];
+
+    var daily_expenses = [];
+    var expense_this_day = 0;
+    var current_day = transactions[0].timestamp;
+    for (var i = 1; i < transactions.length; i++) {
+        var t = transactions[i];
+        if (t.amount > 0) continue;
+
+        if (is_sameday(current_day, t.timestamp)) {
+            expense_this_day += -t.amount;
+        } else {
+            current_day = t.timestamp;
+            daily_expenses.push(expense_this_day);
+            expense_this_day = 0;
+        }
+    }
+    return daily_expenses;
+}
+
+function render_daily_graph() {
+    var canvas = document.getElementById("daily_graph");
+    var context = canvas.getContext('2d');
+    var daily_data = get_daily_expense();
+
+    canvas.width = window.innerWidth;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
+    context.beginPath();
+    context.moveTo
+}
+
 function render_overview_by_time() {
     var transactions = global_data.transactions;
 	render_balance(transactions);
 
 	transactions.sort(function(a, b) { return b.timestamp - a.timestamp });
+    render_daily_graph();
 
     // TODO templating!!!
 	var html = "";
