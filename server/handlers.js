@@ -5,8 +5,15 @@ var http_util = require("http_util");
 
 var ports = {
     clip: require("./clip/settings").port,
-    money: require("./money/settings").port
+    money: require("./money/settings").port,
+    battle: require("./battle/settings").port
 };
+
+var handlers = {};
+
+handlers["^/clip$"] = handlers["^/clip/.*$"] = create_proxy_handler(ports.clip); 
+handlers["^/money$"] = handlers["^/money/.*$"] = create_proxy_handler(ports.money);
+handlers["^/battle$"] = handlers["^/battle/.$"] = create_proxy_handler(ports.battle);
 
 function create_proxy_handler(port) {
     return function(options) {
@@ -41,11 +48,6 @@ function create_proxy_handler(port) {
         });
     };
 }
-
-var handlers = {};
-
-handlers["^/clip$"] = handlers["^/clip/.*$"] = create_proxy_handler(ports.clip); 
-handlers["^/money$"] = handlers["^/money/.*$"] = create_proxy_handler(ports.money);
 
 handlers["^/client/.*"] = function(options) {
     options.static(options);

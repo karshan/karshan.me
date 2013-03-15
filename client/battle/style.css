@@ -1,0 +1,40 @@
+#cliptext {
+    width: 100%;
+    border: none;
+    font-size: 2em;
+    text-align: center;
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+
+#save {
+    width: 100%;
+    border: none;
+    font-size: 2em;
+    text-align: center;
+    background: #a0a0a0;
+    color: white;
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+
+#cliplist {
+    margin: 0;
+    padding: 0;
+}
+
+#cliplist > li {
+    list-style: none;
+    border-bottom: solid 1px #a0a0a0;
+    margin: 0;
+    padding: .5em .5em .5em .5em;
+    text-align: center;
+}
+
+.time {
+    float: right;
+    font-size: .7em;
+    color: #a0a0a0;
+    position: relative;
+    top: -.7em;
+}
