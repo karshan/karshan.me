@@ -2,6 +2,8 @@
 
 // TODO require.js
 
+var url_prefix = "http://" + window.location.hostname + ':' + window.location.port;
+
 document.onkeydown = function(evt) {
     evt = evt || window.event;
 
