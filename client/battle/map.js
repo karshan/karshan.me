@@ -51,6 +51,8 @@ var map = {
                     ctx.fillStyle = "#882222";
                 } else if (map.grid[y][x] == "W") {
                     ctx.fillStyle = "#aaa";
+                } else if (map.grid[y][x] == "B") {
+                    ctx.fillStyle = "#444";
                 } else {
                     ctx.fillStyle = "#000";
                 }
@@ -60,23 +62,62 @@ var map = {
         }
     },
 
+    oob: function(x, y) {
+       if (x < 0 || x >= map.grid[0].length || y < 0 || y >= map.grid.length) return true;
+       return false;
+    },
+
     blocked: function(x, y) {
-        if (x < 0 || x >= map.grid[0].length || y < 0 || y >= map.grid.length) return true;
+        if (map.oob(x, y) == true) return true;
         var tile = map.grid[y][x];
-        return tile == '#' || tile == 'W';
+        return tile == '#' || tile == 'W' || tile == 'B';
     },
 
     collide: function(rect) {
         var x = Math.floor(rect.pos.x/game.SCALE);
         var y = Math.floor(rect.pos.y/game.SCALE);
-        var dx = Math.floor(rect.w/game.SCALE) + sgn(rect.pos.x % game.SCALE);
-        var dy = Math.floor(rect.h/game.SCALE) + sgn(rect.pos.y % game.SCALE);
+        var dx = sgn((rect.pos.x + rect.w) % game.SCALE) + Math.floor((rect.pos.x + rect.w)/game.SCALE) - x;
+        var dy = sgn((rect.pos.y + rect.h) % game.SCALE) + Math.floor((rect.pos.y + rect.h)/game.SCALE) - y;
+        var out = [];
         for (var j = y; j < y + dy; j++) {
             for (var i = x; i < x + dx; i++) {
                 if (map.blocked(i, j) == true)
-                    return true;
+                    out.push({ x: i, y: j });
             }
         }
-        return false;
+        return out;
+    },
+
+    explode: function(x, y, dir, collisions) {
+        var dx = x % game.SCALE;
+        var dy = y % game.SCALE;
+        x = Math.floor(x/game.SCALE);
+        y = Math.floor(y/game.SCALE);
+
+        for (var i = 0; i < collisions.length; i++) {
+            var c = collisions[i];
+            if (map.oob(c.x, c.y)) continue;
+            if (map.grid[c.y][c.x] == "W") return;
+
+            if (map.grid[c.y][c.x] == "B") {
+                map.grid[c.y][c.x] = ".";
+                alert("your base died");
+                game.stop();
+            }
+        }
+
+        for (var i = 0; i < collisions.length; i++) {
+            var c = collisions[i];
+            if (!map.oob(c.x, c.y) && map.grid[c.y][c.x] == "#") {
+                map.grid[c.y][c.x] = ".";
+            }
+        }
+    },
+
+    drawTile: function(x, y) {
+        var ctx = game.ctx;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.fillRect(x * game.SCALE, y * game.SCALE,
+            game.SCALE, game.SCALE);
     }
 };

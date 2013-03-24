@@ -37,3 +37,10 @@ button[40] = function(keyup) {
         player.move({ dx: 0, dy: 1 });
     }
 }
+
+// spacebar
+button[32] = function(keyup) {
+    if (keyup == false) {
+        player.fire();
+    }
+}

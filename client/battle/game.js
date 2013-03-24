@@ -8,6 +8,7 @@ var game = {
 
     ctx: null,
     canvas: null,
+    enemies: [],
 
     start: function() {
         var canvas = game.canvas = document.getElementById("screen");
@@ -25,6 +26,11 @@ var game = {
                 canvas.width = map.grid[0].length * game.SCALE;
                 canvas.height = map.grid.length * game.SCALE;
                 player.spawn();
+                
+                var en = new enemy();
+                en.spawn();
+                game.enemies.push(en);
+                
                 game.interval = setInterval(game.step, 1000.0/game.FPS);
             }
         ], function(err, results) {
@@ -42,12 +48,21 @@ var game = {
     step: function() {
         var ctx = game.ctx;
         var canvas = game.canvas;
+        var enemies = game.enemies;
 
         player.step();
+        missiles.step();
+        for (var i = 0; i < enemies.length; i++) {
+            enemies[i].step();
+        }
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         map.draw();
         player.draw();
+        for (var i = 0; i < enemies.length; i++) {
+            enemies[i].draw();
+        }
+        missiles.draw();
     }
 };

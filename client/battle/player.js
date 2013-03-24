@@ -3,13 +3,21 @@
 var player = {
     SCALE: 2,
     SPEED: 1,
+    WIDTH: null,
+    HEIGHT: null,
+    FIRERATE: 10,
 
     position: null,
     offset: { x: 0, y: 0 },
     next_dir: null,
     dir: null,
+    facing: { dx: 0, dy: -1 },
+    fire_next: false,
+    fired: 0,
 
     spawn: function() {
+        player.WIDTH = player.SCALE * game.SCALE;
+        player.HEIGHT = player.SCALE * game.SCALE;
         var grid = map.grid;
 
         for (var y = 0; y < grid.length - 1; y++) {
@@ -22,8 +30,33 @@ var player = {
         }
     },
 
+    explode: function() {
+        game.stop();
+    },
+
     move: function(dir) {
         player.next_dir = dir;
+        
+        if (dir != null)
+            player.facing = dir;
+    },
+
+    fire_missile: function() {
+        var dx = Math.floor(player.WIDTH/2);
+        var dy = Math.floor(player.HEIGHT/2);
+        var x = player.position.x + dx - 1;
+        var y = player.position.y + dy - 1; 
+        missiles.add("player", {
+            x: x + player.facing.dx * dx,
+            y: y + player.facing.dy * dy
+        }, player.facing);
+        player.fired = player.FIRERATE;
+    },
+
+    fireratelimit: function() {
+        if (player.fired !== 0)
+            player.fired--;
+        return player.fired == 0;
     },
 
     step: function() {
@@ -34,6 +67,11 @@ var player = {
                 dx: player.SPEED * sgn(player.next_dir.dx),
                 dy: player.SPEED * sgn(player.next_dir.dy)
             };
+        }
+
+        if (player.fire_next == true && player.fireratelimit() == true) {
+            player.fire_missile();
+            player.fire_next = false;
         }
 
         if (player.dir == null) return;
@@ -50,12 +88,21 @@ var player = {
         }
     },
 
+    fire: function() {
+        player.fire_next = true;
+    },
+
     draw: function() {
         var ctx = game.ctx;
 
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = "#44aacc";
         ctx.fillRect(player.position.x, player.position.y, 
             player.SCALE * game.SCALE, player.SCALE * game.SCALE);
+    },
+
+    collide: function(x, y, w, h) {
+        return (x >= player.position.x && x + w <= player.position.x + player.WIDTH &&
+            y >= player.position.y && y + h <= player.position.y + player.HEIGHT);
     }
 
 };
