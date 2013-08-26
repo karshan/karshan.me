@@ -38,3 +38,13 @@
     position: relative;
     top: -.7em;
 }
+
+.delete_btn {
+    float: left;
+    font-size: .7em;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    position: relative;
+    top: -.7em;
+}

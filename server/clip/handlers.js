@@ -16,16 +16,47 @@ handlers["^/clip$"] = handlers["^/clip/$"] = function(options) {
 };
 
 // this is a simple clipboard server side implementation
-handlers["^/clip/get$"] = function(options) {    
+handlers["^/clip/get$"] = function(options) {
     couchdb.get({"doc": "_all_docs?include_docs=true", "db": "clip"}, function(res) {
         if (res.error) {
             log(res);
-            util.writeJSON(options.response, {"error": "internal error"});
-            return;
+            return util.writeJSON(options.response, {"error": "internal error"});
         }
-        util.writeJSON(options.response, res.rows.map(function(a) {
-            return a.doc;
-        }));
+        util.writeJSON(
+            options.response,
+            res.rows.map(function(a) {
+                return a.doc;
+            })
+        );
+    });
+};
+
+handlers["^/clip/delete$"] = function(options) {
+    util.getpostJSON(options, function(res) {
+        if (res.error) {
+            return util.writeJSON(options.response, res);
+        }
+
+        options = util.mixin(options, res);
+        if (typeof options.input.id !== "string" || typeof options.input.rev !== "string") {
+            log({
+                "error": "unexpected input",
+                "input": options.input
+            });
+            return util.writeJSON(options.response, {"error": "bad input"});
+        }
+
+        couchdb.delete({
+            "db": "clip",
+            "doc": options.input.id,
+            "rev": options.input.rev
+        }, function(res) {
+            if (res.error) {
+                log(res);
+                return util.writeJSON(options.response, res);
+            }
+            util.writeJSON(options.response, { "ok": true });
+        });
     });
 };
 
@@ -52,8 +83,7 @@ handlers["^/clip/put"] = function(options) {
         }, function(res) {
             if (res.error) {
                 log(res);
-                util.writeJSON(options.response, {"error": "internal error"});
-                return;
+                return util.writeJSON(options.response, {"error": "internal error"});
             }
             util.writeJSON(options.response, { "ok": true });
         });

@@ -79,7 +79,13 @@ function display_clip_list(clipboard) {
 
     // Yes this is vulnerable to XSS
     for (var i in clipboard) {
-        ul.append('<li><pre><a href="' + clipboard[i].text + '">' + clipboard[i].text + '</a></pre>' + '<span class="time">' + datestr(clipboard[i].date) + '</span></li>');
+        ul.append(
+          '<li>' +
+            '<pre><a href="' + clipboard[i].text + '">' + clipboard[i].text + '</a></pre>' +
+            '<span class="time">' + datestr(clipboard[i].date) + '</span>' +
+            '<span class="delete_btn" onclick=\'delete_from_clip("' + clipboard[i]._id + '", "' + clipboard[i]._rev + '")\'>delete</span>' +
+          '</li>'
+        );
     }
 }
 
@@ -97,9 +103,28 @@ function get_and_display() {
         error: function(xhr, textStatus, e) {
             alert('ajax error');
         }
-    });       
+    });
 }
 
+function delete_from_clip(id, rev) {
+    $.ajax({
+        type: "POST",
+        url: url_prefix + '/clip/delete',
+        data: JSON.stringify({"id": id, "rev": rev}),
+        processData: false,
+        success: function(data) {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            get_and_display();
+            $('#cliptext').val('');
+        },
+        error: function(xhr, textStatus, e) {
+            alert('ajax error');
+        }
+    });
+}
 
 function add_to_clip(text) {
     $.ajax({
