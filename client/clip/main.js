@@ -87,63 +87,118 @@ function display_clip_list(clipboard) {
           '</li>'
         );
     }
+
+    var addlist = addCache.get();
+    for (var i in addlist) {
+        ul.append(
+          '<li>' +
+            '<pre>' + addlist[i] + '</a></pre>' +
+          '</li>'
+        );
+    }
 }
 
-function get_and_display() {
-    $.ajax({
-        type: "GET",
-        url: url_prefix + '/clip/get',
-        success: function(data) {
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
-            display_clip_list(data);
+function genStore(key) {
+    return {
+        "save": function(data) {
+            window.localStorage.setItem(key, JSON.stringify(data));
         },
-        error: function(xhr, textStatus, e) {
-            alert('ajax error');
+        "get": function() {
+            var out = null;
+            try {
+                out = JSON.parse(window.localStorage.getItem(key));
+            } catch(e) {
+                return [];
+            }
+            return out;
         }
-    });
+    };
+}
+
+function genArrayStore(key) {
+    var store = genStore(key);
+    store.save([]);
+    return {
+        "push": function(elt) {
+            store.save(store.get().push(elt));
+        },
+        "get": store.get,
+        "save": store.save
+    };
+}
+
+var cache = genStore("clipCache");
+var addCache = genArrayStore("addCache");
+
+function get_and_display() {
+    if (window.navigator.onLine === true || window.navigator.onLine === undefined) {
+        $.ajax({
+            type: "GET",
+            url: url_prefix + '/clip/get',
+            success: function(data) {
+                if (data.error) {
+                    return alert(data.error);
+                }
+
+                cache.save(data);
+                display_clip_list(data);
+            },
+            error: function(xhr, textStatus, e) {
+                alert('ajax error');
+                display_clip_list(cache.get()); 
+            }
+        });
+    } else {
+        display_clip_list(cache.get()); 
+    }
 }
 
 function delete_from_clip(id, rev) {
-    $.ajax({
-        type: "POST",
-        url: url_prefix + '/clip/delete',
-        data: JSON.stringify({"id": id, "rev": rev}),
-        processData: false,
-        success: function(data) {
-            if (data.error) {
-                alert(data.error);
-                return;
+    if (window.navigator.onLine === true || window.navigator.onLine === undefined) {
+        $.ajax({
+            type: "POST",
+            url: url_prefix + '/clip/delete',
+            data: JSON.stringify({"id": id, "rev": rev}),
+            processData: false,
+            success: function(data) {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                get_and_display();
+                $('#cliptext').val('');
+            },
+            error: function(xhr, textStatus, e) {
+                alert('ajax error');
             }
-            get_and_display();
-            $('#cliptext').val('');
-        },
-        error: function(xhr, textStatus, e) {
-            alert('ajax error');
-        }
-    });
+        });
+    } else {
+        alert("cant delete while offline");
+    }
 }
 
 function add_to_clip(text) {
-    $.ajax({
-        type: "POST",
-        url: url_prefix + '/clip/put',
-        data: JSON.stringify({"text": text}),
-        processData: false,
-        success: function(data) {
-            if (data.error) {
-                alert(data.error);
-                return;
+    if (window.navigator.onLine === true || window.navigator.onLine === undefined) {
+        $.ajax({
+            type: "POST",
+            url: url_prefix + '/clip/put',
+            data: JSON.stringify({"text": text}),
+            processData: false,
+            success: function(data) {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                get_and_display();
+                $('#cliptext').val('');
+            },
+            error: function(xhr, textStatus, e) {
+                alert('ajax error');
             }
-            get_and_display();
-            $('#cliptext').val('');
-        },
-        error: function(xhr, textStatus, e) {
-            alert('ajax error');
-        }
-    });
+        });
+    } else {
+       addCache.push(text);
+    }
 }
 
 $(document).ready(function() {
